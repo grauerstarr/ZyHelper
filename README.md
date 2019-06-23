@@ -6,6 +6,10 @@ DEL == Aim at Oculus
 
 E == Hexing Pants (Walk on Hero Spot)
 
+use Modified ZyhelperBetaAdapter.cs from here
+
+and Modified Zyhelper --> Release
+
 # ZyHelper
 This programm automates button presses.
 
