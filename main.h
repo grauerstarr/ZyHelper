@@ -162,6 +162,29 @@ public:
 
 	int ChecksLength = InitChecks.size();
 	int HotkeysLength = InitHotkeys.size();
+	
+	float OldMouseX;
+	float OldMouseY;
+
+	float OldMouseX2;
+	float OldMouseY2;
+
+
+	float DBX;
+	float DBY;
+
+	POINT Pt;
+	POINT Pt2;
+	POINT Pt3;
+	POINT Pt4;
+
+	int start;
+
+	bool tab_pressed = false;
+	bool up_pressed = false;
+
+	bool dont_zappel = false;
+
 	bool Active;
 
 	bool IpCheck;

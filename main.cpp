@@ -10,6 +10,10 @@
 #include <stdio.h>
 #include <iostream>
 
+#include <queue>
+
+#include "Debug.h"
+
 #pragma comment (lib, "Ws2_32.lib")
 #pragma comment (lib, "Mswsock.lib")
 #pragma comment (lib, "AdvApi32.lib")
@@ -192,6 +196,112 @@ DWORD CDiabloCalcFancyDlg::DoLogicThread()
 			}
 		}
 
+		if (GetAsyncKeyState(VK_END) != 0)
+		{
+
+			if ((tcp_connection.EliteX() != 0.0f) && (tcp_connection.EliteY() != 0.0f)) {
+				if (GetCursorPos(&Pt)) {
+					//OldMouseX = Pt.x;
+					//OldMouseY = Pt.y;
+				}
+				SetCursorPos(tcp_connection.EliteX(), tcp_connection.EliteY());
+			}
+
+		}
+
+		if (GetAsyncKeyState(0x45) != 0 && !dont_zappel)
+		{
+
+			if ((tcp_connection.MyX() != 0.0f) && (tcp_connection.MyY() != 0.0f)) {
+				if (GetCursorPos(&Pt3) && up_pressed == false && !(GetAsyncKeyState(VK_TAB) != 0)) {
+					OldMouseX2 = Pt3.x;
+					OldMouseY2 = Pt3.y;
+				}
+
+				float MyPosiX = tcp_connection.MyX();
+				float MyPosiY = tcp_connection.MyY();
+
+				if (MyPosiX != 0.0f && MyPosiY != 0.0f) {
+
+					
+					//HWND handle = ::GetForegroundWindow();
+					//PostMessageA(handle, WM_MBUTTONDOWN, 1, MAKELPARAM(MyPosiX, MyPosiY));
+					//PostMessageA(handle, WM_MBUTTONUP, 0, 0);
+					//Sleep(150);
+					
+					INPUT space = { 0 };
+					space.type = INPUT_KEYBOARD;
+					space.ki.wVk = VK_SPACE;
+					SendInput(1, &space, sizeof(INPUT)); // Send KeyDown
+
+					SetCursorPos(MyPosiX, MyPosiY);
+					Sleep(150);
+					space.ki.dwFlags = KEYEVENTF_KEYUP;
+					SendInput(1, &space, sizeof(INPUT)); // Send KeyUp		
+				}
+
+			}
+			up_pressed = true;
+
+		}
+		else if (up_pressed)
+		{
+			up_pressed = false;
+			// do something on key release.
+
+			if (GetCursorPos(&Pt4)) {
+				if ((OldMouseX2 != 0.0f) && (OldMouseY2 != 0.0f)) {
+					if ((OldMouseX2 != Pt3.x) && (OldMouseY2 != Pt3.y)) {
+						SetCursorPos(OldMouseX2, OldMouseY2);
+						OldMouseX2 = 0.0f;
+						OldMouseY2 = 0.0f;
+					}
+				}
+			}
+
+
+		}
+
+
+
+		if (GetAsyncKeyState(VK_TAB) != 0)
+		{
+
+			if ((tcp_connection.EliteX() != 0.0f) && (tcp_connection.EliteY() != 0.0f)) {
+				if (GetCursorPos(&Pt) && tab_pressed == false) {
+					OldMouseX = Pt.x;
+					OldMouseY = Pt.y;
+				}
+				SetCursorPos(tcp_connection.EliteX(), tcp_connection.EliteY());
+			}
+			tab_pressed = true;
+
+		}
+		else if (tab_pressed)
+		{
+			tab_pressed = false;
+			// do something on key release.
+			if (GetCursorPos(&Pt2)) {
+				if ((OldMouseX != 0.0f) && (OldMouseY != 0.0f)) {
+					if ((OldMouseX != Pt2.x) && (OldMouseY != Pt2.y)) {
+						SetCursorPos(OldMouseX, OldMouseY);
+						OldMouseX = 0.0f;
+						OldMouseY = 0.0f;
+					}
+				}
+			}
+
+		}
+
+		if (GetAsyncKeyState(VK_DELETE) != 0)
+		{
+
+			if ((tcp_connection.OcuX() != 0.0f) && (tcp_connection.OcuY() != 0.0f)) {
+				SetCursorPos(tcp_connection.OcuX(), tcp_connection.OcuY());
+			}
+
+		}
+
 		bool CastPotion = tcp_connection.CastPotion();
 		if (CastPotion && PotionCheck)
 		{
@@ -327,12 +437,14 @@ DWORD CDiabloCalcFancyDlg::DoLogicThread()
 			bool InARift = tcp_connection.InARift();
 			if (CastSkeleMages && SkeleMageCheck)
 			{
+				dont_zappel = true;
 				input_simulator.SendKeyOrMouseWithoutMove(SkeleMageHotkey);
 				if (Hexing && InARift)
 				{
 					input_simulator.MoveMouse();
 				}
 				Sleep(100);
+				dont_zappel = false;
 			}
 			//devour
 			if (DevourCheck)
@@ -558,7 +670,7 @@ DWORD CDiabloCalcFancyDlg::HexingMacroThread()
 			Sleep(100);
 			continue;
 		}
-		if (!tcp_connection.Active() || !Active)
+		if (!tcp_connection.Active())
 		{
 			SwitchToThread();
 			Sleep(100);

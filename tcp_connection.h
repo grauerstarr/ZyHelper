@@ -78,7 +78,25 @@ public:
 	bool CastExplosiveBlast() { return ElementAt(2, 6); };
 	bool CastBloodNova() { return ElementAt(3, 6); };
 
+	float EliteX() { return FloatAt(8); };
+	float EliteY() { return FloatAt(12); };
+
+	float DeathBX() { return FloatAt(16); };
+	float DeathBY() { return FloatAt(20); };
+
+	float OcuX() { return FloatAt(24); };
+	float OcuY() { return FloatAt(28); };
+
+	float D3Lat() { return FloatAt(32); };
+
+	float MyX() { return FloatAt(36); };
+	float MyY() { return FloatAt(40); };
+
+
 	bool ElementAt(unsigned  i, unsigned j);
+	bool ElementAt(byte* bytedata, unsigned j);
+
+	float FloatAt(unsigned j);
 	std::string content;
 	std::mutex tcpmutex;
 	bool Running;

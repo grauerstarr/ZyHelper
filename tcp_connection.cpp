@@ -151,6 +151,77 @@ bool TCPConnection::ElementAt(unsigned  i, unsigned j)
 	return result;
 }
 
+bool TCPConnection::ElementAt(byte* bytedata, unsigned j) {
+	try {
+		*bytedata = text[j];
+		return true;
+	}
+	catch (const std::out_of_range&) {
+		return false;
+	}
+
+
+}
+
+
+int GetFloatFromByte(float* fdata, unsigned char data0, unsigned char data1, unsigned char data2, unsigned char data3) {
+	//Get IEEE 754 Floating point format from data0, data1, data2, data3     
+	//fdata  :  float  data  IEEE754 floating-point Translate 
+	//data0, data1, data2, data3 : 8-bit Hexadecimal data       
+	//return code ==> 0: OK, -1: Not Available         
+	int  i, s = 1;
+	unsigned char e = 0;
+	unsigned long m = 0;
+	double  value, result;
+	if (data0 & 0x80)
+		s = -1;
+	e = (data0 & 0x7F) << 1;
+	e = e | ((data1 & 0x80) ? 1 : 0);
+	m = (data1 & 0x7F) << 16;      m = m | (data2 << 8);
+	m = m | data3;
+	if ((e == 0) && (m == 0))
+	{
+		fdata = 0;
+		return 0;
+	}
+	else if ((data0 == 0x7F) && (data1 >= 0x80))//7F800001~7FFFFFFF   
+	{
+		if ((data1 != 0x80) && (data3 != 0x00))       return -1;
+	}
+	else if ((data0 == 0xFF) && (data1 >= 0x80))//FF800001~FFFFFFFF   
+	{
+		if ((data1 != 0x80) && (data3 != 0x00))       return -1;
+	}
+	result = 1;      for (i = -23; i < 0; i++)
+	{
+		value = (m & 0x00000001) ? pow(2, i) : 0;
+		result += value;      m = m >> 1;
+	}
+	result *= s;
+	result *= pow(2, e - 127);
+	*fdata = result;
+	return  0;
+}
+
+
+float TCPConnection::FloatAt(unsigned j)
+{
+	float x = 0.0f;
+	byte nr1;
+	byte nr2;
+	byte nr3;
+	byte nr4;
+	if (ElementAt(&nr1, j) && ElementAt(&nr2, j + 1) && ElementAt(&nr3, j + 2) && ElementAt(&nr4, j + 3))
+	{
+		GetFloatFromByte(&x, nr1, nr2, nr3, nr4);
+		return x;
+	}
+	else {
+		return 0.0f;
+	}
+
+}
+
 bool TCPConnection::IsReady()
 {
 	if (!Running) return false;

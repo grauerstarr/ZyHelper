@@ -318,20 +318,22 @@ void InputSimulator::MoveMouse()
 	if (GetAsyncKeyState(CharToVK('7')) < 0) return;
 
 	Sleep(1);
-	HWND handle = ::GetForegroundWindow();
+	POINT mouse;
+	GetCursorPos(&mouse);
+	HWND handle = WindowFromPoint(mouse);
 	if (MouseMoveState)
 	{
 		Sleep(10);
-		PostMessage(handle, WM_MBUTTONDOWN, 1, (int)((507 << 16) | (820 & 0xFFFF)));
-		PostMessage(handle, WM_MBUTTONUP, 1, 0);
+		PostMessage(handle, WM_MBUTTONDOWN, 1, MAKELPARAM(1918, 1012));
+		PostMessage(handle, WM_MBUTTONUP, 0, 0);
 		Sleep(10);
 		//SetCursorPos(820, 507);
 	}
 	else
 	{
 		Sleep(10);
-		PostMessage(handle, WM_MBUTTONDOWN, 1, (int)((507 << 16) | (1100 & 0xFFFF)));
-		PostMessage(handle, WM_MBUTTONUP, 1, 0);
+		PostMessage(handle, WM_MBUTTONDOWN, 1, MAKELPARAM(1922, 1017));
+		PostMessage(handle, WM_MBUTTONUP, 0, 0);
 		Sleep(10);
 		//SetCursorPos(1100, 507);
 	}

@@ -485,13 +485,13 @@ void WizMacro::DoMacro(InputSimulator* input_simulator, TCPConnection* tcp_conne
 					Sleep(100);
 				}
 
-					Sleep(1166 - 100);
+					Sleep(1050);
 
 				input_simulator->SendKeyDown(DisintegrateHotkey);
-				Sleep(DWORD(5.0 * (1000.0 / 60.0)));
+				Sleep(85);
 				input_simulator->SendKeyOrMouseWithoutMove(ArchonHotkey);
 				input_simulator->SendKeyUp(DisintegrateHotkey);
-				Sleep(200);
+				Sleep(115);
 				Shooting = false;
 			}
 		}
