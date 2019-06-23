@@ -1,3 +1,10 @@
+# Modified
+
+TAB == Aim at Elites
+DEL == Aim at Oculus
+
+E == Hexing Pants (Walk on Hero Spot)
+
 # ZyHelper
 This programm automates button presses.
 
