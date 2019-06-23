@@ -4,7 +4,7 @@ TAB == Aim at Elites
 
 DEL == Aim at Oculus
 
-E == Hexing Pants (Walk on Hero Spot)
+E == Hexing Pants (Walk on Hero Spot (Space == Force Move))
 
 use Modified ZyhelperBetaAdapter.cs from here
 
